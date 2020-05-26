@@ -38,7 +38,15 @@ public final class ZombieRider extends JavaPlugin implements Listener {
             ridingPlayers.remove(player);
         }
     }
-
+    
+    @EventHandler
+    public void onLeavePlayer(PlayerQuitEvent e){
+        String player = e.getPlayer().getName();
+        if (ridingPlayers.contains(player)) {
+            ridingPlayers.remove(player);
+        }
+    }
+    
     @EventHandler
     public void onRightClick(PlayerInteractEntityEvent e) {
         String entity = e.getRightClicked().getName();
