@@ -1,2 +1,2 @@
 # ZombieRider
-Simple (haha, no) that allows you to ride some monsters
+Simple (haha, no) plugin that allows you to ride some monsters
