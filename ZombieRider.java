@@ -71,8 +71,10 @@ public final class ZombieRider extends JavaPlugin implements Listener {
                         timer = 24;
                         int taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
                             public void run() {
-                                Location loc = new Location(e.getPlayer().getWorld(), e.getPlayer().getLocation().getBlockX(), (e.getPlayer().getLocation().getBlockY() - 3), e.getPlayer().getLocation().getBlockZ());
-                                if (loc.getBlock().getType() != Material.AIR){
+                                Location loc1 = new Location(e.getPlayer().getWorld(), e.getPlayer().getLocation().getBlockX(), (e.getPlayer().getLocation().getBlockY() - 1), e.getPlayer().getLocation().getBlockZ());
+                                Location loc2 = new Location(e.getPlayer().getWorld(), e.getPlayer().getLocation().getBlockX(), (e.getPlayer().getLocation().getBlockY() - 2), e.getPlayer().getLocation().getBlockZ());
+                                Location loc3 = new Location(e.getPlayer().getWorld(), e.getPlayer().getLocation().getBlockX(), (e.getPlayer().getLocation().getBlockY() - 3), e.getPlayer().getLocation().getBlockZ());
+                                if (loc1.getBlock().getType() != Material.AIR || loc2.getBlock().getType() != Material.AIR || loc3.getBlock().getType() != Material.AIR){
                                     Vector pos = ent.getLocation().toVector();
                                     Vector target = e.getPlayer().getTargetBlock(null, 50).getLocation().toVector();
                                     Vector velocity = target.subtract(pos);
