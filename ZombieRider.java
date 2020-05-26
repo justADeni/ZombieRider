@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.util.Vector;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -38,7 +39,7 @@ public final class ZombieRider extends JavaPlugin implements Listener {
             ridingPlayers.remove(player);
         }
     }
-    
+
     @EventHandler
     public void onLeavePlayer(PlayerQuitEvent e){
         String player = e.getPlayer().getName();
@@ -46,26 +47,28 @@ public final class ZombieRider extends JavaPlugin implements Listener {
             ridingPlayers.remove(player);
         }
     }
-    
+
     @EventHandler
     public void onRightClick(PlayerInteractEntityEvent e) {
         String entity = e.getRightClicked().getName();
         if ((entity.equalsIgnoreCase(String.valueOf(EntityType.ZOMBIE))) || (entity.equalsIgnoreCase(String.valueOf(EntityType.ENDERMAN))) || (entity.equalsIgnoreCase(String.valueOf(EntityType.SKELETON))) || (entity.equalsIgnoreCase(String.valueOf(EntityType.DROWNED))) || (entity.equalsIgnoreCase(String.valueOf(EntityType.BLAZE))) || (entity.equalsIgnoreCase(String.valueOf(EntityType.WITHER_SKELETON))) || (entity.equalsIgnoreCase(String.valueOf(EntityType.WITCH))) || (entity.equalsIgnoreCase(String.valueOf(EntityType.SPIDER))) || (entity.equalsIgnoreCase(String.valueOf(EntityType.CAVE_SPIDER))) || (entity.equalsIgnoreCase(String.valueOf(EntityType.CREEPER)))) {
             Player player = e.getPlayer();
             Entity ent = e.getRightClicked();
-            ent.addPassenger(player);
-            ridingPlayers.add(e.getPlayer().getName());
+            if (ent.getPassenger() == null) {
+                ent.addPassenger(player);
+                ridingPlayers.add(e.getPlayer().getName());
+            }
         }
     }
 
     @EventHandler
-    public void onMovePlayer(PlayerInteractEvent e) {
+    public void onClickPlayer(PlayerInteractEvent e) {
         if (ridingPlayers.contains(e.getPlayer().getName())) {
             if (!(e.getPlayer().isOnGround())) {
                 for (Entity ent : e.getPlayer().getNearbyEntities(1, 3, 1)) {
                     if (ent instanceof Zombie || ent instanceof Skeleton || ent instanceof Enderman || ent instanceof Creeper || ent instanceof Drowned || ent instanceof Blaze || ent instanceof Witch || ent instanceof Spider || ent instanceof CaveSpider || ent instanceof WitherSkeleton) {
                         AtomicInteger processId = new AtomicInteger();
-                        timer = 5;
+                        timer = 24;
                         int taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
                             public void run() {
                                 Location loc = new Location(e.getPlayer().getWorld(), e.getPlayer().getLocation().getBlockX(), (e.getPlayer().getLocation().getBlockY() - 3), e.getPlayer().getLocation().getBlockZ());
@@ -73,7 +76,7 @@ public final class ZombieRider extends JavaPlugin implements Listener {
                                     Vector pos = ent.getLocation().toVector();
                                     Vector target = e.getPlayer().getTargetBlock(null, 50).getLocation().toVector();
                                     Vector velocity = target.subtract(pos);
-                                    ent.setVelocity(velocity.normalize().multiply(0.30));
+                                    ent.setVelocity(velocity.normalize().multiply(0.40));
                                 } else {
                                     e.setCancelled(true);
                                 }
@@ -83,9 +86,9 @@ public final class ZombieRider extends JavaPlugin implements Listener {
                                 if (timer <= 0) {
                                     Bukkit.getScheduler().cancelTask(processId.get());
                                 }
-                                //5 second timer
+                                //timer cancels movement
                             }
-                        }, 0, 20);
+                        }, 0, 8);
                         processId.set(taskId);
                     }
                 }
