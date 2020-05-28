@@ -22,3 +22,9 @@ allows you to do /zombierider reload
 /zombierider reload
 
 reloads the config
+
+# Config
+
+NoRiderDamage: true
+
+if it's true, mobs you ride won't damage you
